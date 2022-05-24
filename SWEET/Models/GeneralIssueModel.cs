@@ -1,4 +1,6 @@
-﻿namespace SWEET.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace SWEET.Models
 {
     public class GeneralIssueModel
     {
@@ -6,7 +8,7 @@
         DateTime Created { get; set; }
         public DateTime Updated { get; set; }  
         public string Description { get; set; }
-        public staff StaffMember { get; set; } 
+        public IdentityUser LoggedBy { get; set; } 
 
 
     }
