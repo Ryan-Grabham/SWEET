@@ -49,27 +49,16 @@ namespace SWEET.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AssetModel",
+                name: "Institutions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AssetModel", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoomModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoomModel", x => x.Id);
+                    table.PrimaryKey("PK_Institutions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,96 +167,6 @@ namespace SWEET.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "GeneralIssueModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoggedById = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GeneralIssueModel", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GeneralIssueModel_AspNetUsers_LoggedById",
-                        column: x => x.LoggedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MaintenanceIssueModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoggedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false),
-                    AssetsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MaintenanceIssueModel", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MaintenanceIssueModel_AspNetUsers_LoggedById",
-                        column: x => x.LoggedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MaintenanceIssueModel_AssetModel_AssetsId",
-                        column: x => x.AssetsId,
-                        principalTable: "AssetModel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MaintenanceIssueModel_RoomModel_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "RoomModel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Institutions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false),
-                    MaintenanceIssueId = table.Column<int>(type: "int", nullable: false),
-                    GeneralIssueId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Institutions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Institutions_GeneralIssueModel_GeneralIssueId",
-                        column: x => x.GeneralIssueId,
-                        principalTable: "GeneralIssueModel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Institutions_MaintenanceIssueModel_MaintenanceIssueId",
-                        column: x => x.MaintenanceIssueId,
-                        principalTable: "MaintenanceIssueModel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Institutions_RoomModel_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "RoomModel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -306,41 +205,6 @@ namespace SWEET.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GeneralIssueModel_LoggedById",
-                table: "GeneralIssueModel",
-                column: "LoggedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Institutions_GeneralIssueId",
-                table: "Institutions",
-                column: "GeneralIssueId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Institutions_MaintenanceIssueId",
-                table: "Institutions",
-                column: "MaintenanceIssueId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Institutions_RoomId",
-                table: "Institutions",
-                column: "RoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MaintenanceIssueModel_AssetsId",
-                table: "MaintenanceIssueModel",
-                column: "AssetsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MaintenanceIssueModel_LoggedById",
-                table: "MaintenanceIssueModel",
-                column: "LoggedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MaintenanceIssueModel_RoomId",
-                table: "MaintenanceIssueModel",
-                column: "RoomId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -367,19 +231,7 @@ namespace SWEET.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "GeneralIssueModel");
-
-            migrationBuilder.DropTable(
-                name: "MaintenanceIssueModel");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "AssetModel");
-
-            migrationBuilder.DropTable(
-                name: "RoomModel");
         }
     }
 }

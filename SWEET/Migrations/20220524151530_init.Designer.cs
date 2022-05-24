@@ -12,14 +12,14 @@ using SWEET.Data;
 namespace SWEET.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220524143348_init")]
+    [Migration("20220524151530_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -226,45 +226,6 @@ namespace SWEET.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SWEET.Models.AssetModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AssetModel");
-                });
-
-            modelBuilder.Entity("SWEET.Models.GeneralIssueModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LoggedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LoggedById");
-
-                    b.ToTable("GeneralIssueModel");
-                });
-
             modelBuilder.Entity("SWEET.Models.InstitutionModel", b =>
                 {
                     b.Property<int>("Id")
@@ -273,77 +234,13 @@ namespace SWEET.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("GeneralIssueId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MaintenanceIssueId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("GeneralIssueId");
-
-                    b.HasIndex("MaintenanceIssueId");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("Institutions");
-                });
-
-            modelBuilder.Entity("SWEET.Models.MaintenanceIssueModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AssetsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LoggedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetsId");
-
-                    b.HasIndex("LoggedById");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("MaintenanceIssueModel");
-                });
-
-            modelBuilder.Entity("SWEET.Models.RoomModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RoomModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -395,71 +292,6 @@ namespace SWEET.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SWEET.Models.GeneralIssueModel", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "LoggedBy")
-                        .WithMany()
-                        .HasForeignKey("LoggedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LoggedBy");
-                });
-
-            modelBuilder.Entity("SWEET.Models.InstitutionModel", b =>
-                {
-                    b.HasOne("SWEET.Models.GeneralIssueModel", "GeneralIssue")
-                        .WithMany()
-                        .HasForeignKey("GeneralIssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SWEET.Models.MaintenanceIssueModel", "MaintenanceIssue")
-                        .WithMany()
-                        .HasForeignKey("MaintenanceIssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SWEET.Models.RoomModel", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GeneralIssue");
-
-                    b.Navigation("MaintenanceIssue");
-
-                    b.Navigation("Room");
-                });
-
-            modelBuilder.Entity("SWEET.Models.MaintenanceIssueModel", b =>
-                {
-                    b.HasOne("SWEET.Models.AssetModel", "Assets")
-                        .WithMany()
-                        .HasForeignKey("AssetsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "LoggedBy")
-                        .WithMany()
-                        .HasForeignKey("LoggedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SWEET.Models.RoomModel", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Assets");
-
-                    b.Navigation("LoggedBy");
-
-                    b.Navigation("Room");
                 });
 #pragma warning restore 612, 618
         }
