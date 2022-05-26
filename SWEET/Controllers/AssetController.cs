@@ -22,20 +22,20 @@ namespace SWEET
         // GET: Asset
         public async Task<IActionResult> Index()
         {
-              return _context.AssetModel != null ? 
-                          View(await _context.AssetModel.ToListAsync()) :
+              return _context.Assets != null ? 
+                          View(await _context.Assets.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.AssetModel'  is null.");
         }
 
         // GET: Asset/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.AssetModel == null)
+            if (id == null || _context.Assets == null)
             {
                 return NotFound();
             }
 
-            var assetModel = await _context.AssetModel
+            var assetModel = await _context.Assets
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (assetModel == null)
             {
@@ -70,12 +70,12 @@ namespace SWEET
         // GET: Asset/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.AssetModel == null)
+            if (id == null || _context.Assets == null)
             {
                 return NotFound();
             }
 
-            var assetModel = await _context.AssetModel.FindAsync(id);
+            var assetModel = await _context.Assets.FindAsync(id);
             if (assetModel == null)
             {
                 return NotFound();
@@ -121,12 +121,12 @@ namespace SWEET
         // GET: Asset/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.AssetModel == null)
+            if (id == null || _context.Assets == null)
             {
                 return NotFound();
             }
 
-            var assetModel = await _context.AssetModel
+            var assetModel = await _context.Assets
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (assetModel == null)
             {
@@ -141,14 +141,14 @@ namespace SWEET
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.AssetModel == null)
+            if (_context.Assets == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.AssetModel'  is null.");
             }
-            var assetModel = await _context.AssetModel.FindAsync(id);
+            var assetModel = await _context.Assets.FindAsync(id);
             if (assetModel != null)
             {
-                _context.AssetModel.Remove(assetModel);
+                _context.Assets.Remove(assetModel);
             }
             
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace SWEET
 
         private bool AssetModelExists(int id)
         {
-          return (_context.AssetModel?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Assets?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

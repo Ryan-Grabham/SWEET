@@ -22,19 +22,19 @@ namespace SWEET
         // GET: GeneralIssue
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.GeneralIssueModel.Include(g => g.LoggedBy);
+            var applicationDbContext = _context.GeneralIssues.Include(g => g.LoggedBy);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: GeneralIssue/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.GeneralIssueModel == null)
+            if (id == null || _context.GeneralIssues == null)
             {
                 return NotFound();
             }
 
-            var generalIssueModel = await _context.GeneralIssueModel
+            var generalIssueModel = await _context.GeneralIssues
                 .Include(g => g.LoggedBy)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (generalIssueModel == null)
@@ -72,12 +72,12 @@ namespace SWEET
         // GET: GeneralIssue/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.GeneralIssueModel == null)
+            if (id == null || _context.GeneralIssues == null)
             {
                 return NotFound();
             }
 
-            var generalIssueModel = await _context.GeneralIssueModel.FindAsync(id);
+            var generalIssueModel = await _context.GeneralIssues.FindAsync(id);
             if (generalIssueModel == null)
             {
                 return NotFound();
@@ -125,12 +125,12 @@ namespace SWEET
         // GET: GeneralIssue/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.GeneralIssueModel == null)
+            if (id == null || _context.GeneralIssues == null)
             {
                 return NotFound();
             }
 
-            var generalIssueModel = await _context.GeneralIssueModel
+            var generalIssueModel = await _context.GeneralIssues
                 .Include(g => g.LoggedBy)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (generalIssueModel == null)
@@ -146,14 +146,14 @@ namespace SWEET
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.GeneralIssueModel == null)
+            if (_context.GeneralIssues == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.GeneralIssueModel'  is null.");
             }
-            var generalIssueModel = await _context.GeneralIssueModel.FindAsync(id);
+            var generalIssueModel = await _context.GeneralIssues.FindAsync(id);
             if (generalIssueModel != null)
             {
-                _context.GeneralIssueModel.Remove(generalIssueModel);
+                _context.GeneralIssues.Remove(generalIssueModel);
             }
             
             await _context.SaveChangesAsync();
@@ -162,7 +162,7 @@ namespace SWEET
 
         private bool GeneralIssueModelExists(int id)
         {
-          return (_context.GeneralIssueModel?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.GeneralIssues?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

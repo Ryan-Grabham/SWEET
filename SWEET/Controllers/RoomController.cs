@@ -22,20 +22,20 @@ namespace SWEET
         // GET: Room
         public async Task<IActionResult> Index()
         {
-              return _context.RoomModel != null ? 
-                          View(await _context.RoomModel.ToListAsync()) :
+              return _context.Rooms != null ? 
+                          View(await _context.Rooms.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.RoomModel'  is null.");
         }
 
         // GET: Room/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.RoomModel == null)
+            if (id == null || _context.Rooms == null)
             {
                 return NotFound();
             }
 
-            var roomModel = await _context.RoomModel
+            var roomModel = await _context.Rooms
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (roomModel == null)
             {
@@ -70,12 +70,12 @@ namespace SWEET
         // GET: Room/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.RoomModel == null)
+            if (id == null || _context.Rooms == null)
             {
                 return NotFound();
             }
 
-            var roomModel = await _context.RoomModel.FindAsync(id);
+            var roomModel = await _context.Rooms.FindAsync(id);
             if (roomModel == null)
             {
                 return NotFound();
@@ -121,12 +121,12 @@ namespace SWEET
         // GET: Room/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.RoomModel == null)
+            if (id == null || _context.Rooms == null)
             {
                 return NotFound();
             }
 
-            var roomModel = await _context.RoomModel
+            var roomModel = await _context.Rooms
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (roomModel == null)
             {
@@ -141,14 +141,14 @@ namespace SWEET
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.RoomModel == null)
+            if (_context.Rooms == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.RoomModel'  is null.");
             }
-            var roomModel = await _context.RoomModel.FindAsync(id);
+            var roomModel = await _context.Rooms.FindAsync(id);
             if (roomModel != null)
             {
-                _context.RoomModel.Remove(roomModel);
+                _context.Rooms.Remove(roomModel);
             }
             
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace SWEET
 
         private bool RoomModelExists(int id)
         {
-          return (_context.RoomModel?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Rooms?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

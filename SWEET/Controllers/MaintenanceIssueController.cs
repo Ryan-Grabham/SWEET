@@ -22,19 +22,19 @@ namespace SWEET
         // GET: MaintenanceIssue
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.MaintenanceIssueModel.Include(m => m.Asset).Include(m => m.LoggedBy).Include(m => m.Room);
+            var applicationDbContext = _context.MaintenanceIssue.Include(m => m.Asset).Include(m => m.LoggedBy).Include(m => m.Room);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: MaintenanceIssue/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.MaintenanceIssueModel == null)
+            if (id == null || _context.MaintenanceIssue == null)
             {
                 return NotFound();
             }
 
-            var maintenanceIssueModel = await _context.MaintenanceIssueModel
+            var maintenanceIssueModel = await _context.MaintenanceIssue
                 .Include(m => m.Asset)
                 .Include(m => m.LoggedBy)
                 .Include(m => m.Room)
@@ -50,9 +50,9 @@ namespace SWEET
         // GET: MaintenanceIssue/Create
         public IActionResult Create()
         {
-            ViewData["AssetId"] = new SelectList(_context.AssetModel, "Id", "Id");
+            ViewData["AssetId"] = new SelectList(_context.Assets, "Id", "Id");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["RoomId"] = new SelectList(_context.RoomModel, "Id", "Id");
+            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id");
             return View();
         }
 
@@ -69,28 +69,28 @@ namespace SWEET
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetId"] = new SelectList(_context.AssetModel, "Id", "Id", maintenanceIssueModel.AssetId);
+            ViewData["AssetId"] = new SelectList(_context.Assets, "Id", "Id", maintenanceIssueModel.AssetId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", maintenanceIssueModel.UserId);
-            ViewData["RoomId"] = new SelectList(_context.RoomModel, "Id", "Id", maintenanceIssueModel.RoomId);
+            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", maintenanceIssueModel.RoomId);
             return View(maintenanceIssueModel);
         }
 
         // GET: MaintenanceIssue/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.MaintenanceIssueModel == null)
+            if (id == null || _context.MaintenanceIssue == null)
             {
                 return NotFound();
             }
 
-            var maintenanceIssueModel = await _context.MaintenanceIssueModel.FindAsync(id);
+            var maintenanceIssueModel = await _context.MaintenanceIssue.FindAsync(id);
             if (maintenanceIssueModel == null)
             {
                 return NotFound();
             }
-            ViewData["AssetId"] = new SelectList(_context.AssetModel, "Id", "Id", maintenanceIssueModel.AssetId);
+            ViewData["AssetId"] = new SelectList(_context.Assets, "Id", "Id", maintenanceIssueModel.AssetId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", maintenanceIssueModel.UserId);
-            ViewData["RoomId"] = new SelectList(_context.RoomModel, "Id", "Id", maintenanceIssueModel.RoomId);
+            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", maintenanceIssueModel.RoomId);
             return View(maintenanceIssueModel);
         }
 
@@ -126,21 +126,21 @@ namespace SWEET
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetId"] = new SelectList(_context.AssetModel, "Id", "Id", maintenanceIssueModel.AssetId);
+            ViewData["AssetId"] = new SelectList(_context.Assets, "Id", "Id", maintenanceIssueModel.AssetId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", maintenanceIssueModel.UserId);
-            ViewData["RoomId"] = new SelectList(_context.RoomModel, "Id", "Id", maintenanceIssueModel.RoomId);
+            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", maintenanceIssueModel.RoomId);
             return View(maintenanceIssueModel);
         }
 
         // GET: MaintenanceIssue/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.MaintenanceIssueModel == null)
+            if (id == null || _context.MaintenanceIssue == null)
             {
                 return NotFound();
             }
 
-            var maintenanceIssueModel = await _context.MaintenanceIssueModel
+            var maintenanceIssueModel = await _context.MaintenanceIssue
                 .Include(m => m.Asset)
                 .Include(m => m.LoggedBy)
                 .Include(m => m.Room)
@@ -158,14 +158,14 @@ namespace SWEET
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.MaintenanceIssueModel == null)
+            if (_context.MaintenanceIssue == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.MaintenanceIssueModel'  is null.");
             }
-            var maintenanceIssueModel = await _context.MaintenanceIssueModel.FindAsync(id);
+            var maintenanceIssueModel = await _context.MaintenanceIssue.FindAsync(id);
             if (maintenanceIssueModel != null)
             {
-                _context.MaintenanceIssueModel.Remove(maintenanceIssueModel);
+                _context.MaintenanceIssue.Remove(maintenanceIssueModel);
             }
             
             await _context.SaveChangesAsync();
@@ -174,7 +174,7 @@ namespace SWEET
 
         private bool MaintenanceIssueModelExists(int id)
         {
-          return (_context.MaintenanceIssueModel?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.MaintenanceIssue?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

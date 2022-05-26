@@ -13,7 +13,7 @@ namespace SWEET.Models
         public string UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public IdentityUser LoggedBy { get; set; }
+        public UserModel LoggedBy { get; set; }
 
 
 
