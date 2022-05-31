@@ -10,86 +10,87 @@ using SWEET.Models;
 
 namespace SWEET
 {
-    public class RoomController : Controller
+       public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public RoomController(ApplicationDbContext context)
+        public CategoryController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Room
+        // GET: Category
         public async Task<IActionResult> Index()
         {
-              return _context.Rooms != null ? 
-                          View(await _context.Rooms.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.RoomModel'  is null.");
+            return _context.Categories != null?
+                        View(await _context.Categories.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.CategoryModel'  is null.");
         }
 
-        // GET: Room/Details/5
+        // GET: Category/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Rooms == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var roomModel = await _context.Rooms
+            var categoryModel = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomModel == null)
+            if (categoryModel == null)
             {
                 return NotFound();
             }
 
-            return View(roomModel);
+            return View(categoryModel);
         }
 
-        // GET: Room/Create
+        // GET: Category/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Room/Create
+        // POST: Category/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] RoomModel roomModel)
+        public async Task<IActionResult> Create([Bind("Id,Name")] CategoryModel categoryModel)
         {
-            
-                _context.Add(roomModel);
+            if (ModelState.IsValid)
+            {
+                _context.Add(categoryModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            
-            return View(roomModel);
+            }
+            return View(categoryModel);
         }
 
-        // GET: Room/Edit/5
+        // GET: Category/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Rooms == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var roomModel = await _context.Rooms.FindAsync(id);
-            if (roomModel == null)
+            var categoryModel = await _context.Categories.FindAsync(id);
+            if (categoryModel == null)
             {
                 return NotFound();
             }
-            return View(roomModel);
+            return View(categoryModel);
         }
 
-        // POST: Room/Edit/5
+        // POST: Category/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] RoomModel roomModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] CategoryModel categoryModel)
         {
-            if (id != roomModel.Id)
+            if (id != categoryModel.Id)
             {
                 return NotFound();
             }
@@ -98,12 +99,12 @@ namespace SWEET
             {
                 try
                 {
-                    _context.Update(roomModel);
+                    _context.Update(categoryModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RoomModelExists(roomModel.Id))
+                    if (!CategoryModelExists(categoryModel.Id))
                     {
                         return NotFound();
                     }
@@ -114,49 +115,49 @@ namespace SWEET
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(roomModel);
+            return View(categoryModel);
         }
 
-        // GET: Room/Delete/5
+        // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Rooms == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var roomModel = await _context.Rooms
+            var categoryModel = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomModel == null)
+            if (categoryModel == null)
             {
                 return NotFound();
             }
 
-            return View(roomModel);
+            return View(categoryModel);
         }
 
-        // POST: Room/Delete/5
+        // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Rooms == null)
+            if (_context.Categories == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.RoomModel'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.CategoryModel'  is null.");
             }
-            var roomModel = await _context.Rooms.FindAsync(id);
-            if (roomModel != null)
+            var categoryModel = await _context.Categories.FindAsync(id);
+            if (categoryModel != null)
             {
-                _context.Rooms.Remove(roomModel);
+                _context.Categories.Remove(categoryModel);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RoomModelExists(int id)
+        private bool CategoryModelExists(int id)
         {
-          return (_context.Rooms?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Categories?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

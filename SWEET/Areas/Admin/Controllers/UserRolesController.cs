@@ -7,154 +7,137 @@ using SWEET.Models;
 
 namespace SWEET.Areas.Admin.Controllers
 {
-    
 
-        [Authorize(Roles = "Admin")]
-        [Area("Admin")]
-        public class UserRolesController : Controller
+
+    [Authorize(Roles = "Admin")]
+    [Area("Admin")]
+    public class UserRolesController : Controller
+    {
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<UserModel> _userManager;
+        public UserRolesController(RoleManager<IdentityRole> roleManager, UserManager<UserModel> userManager)
         {
-            private readonly RoleManager<IdentityRole> _roleManager;
-            private readonly UserManager<UserModel> _userManager;
-            public UserRolesController(RoleManager<IdentityRole> roleManager, UserManager<UserModel> userManager)
+            _roleManager = roleManager;
+            _userManager = userManager;
+        }
+
+
+
+        public async Task<IActionResult> Index()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var VMlist = new List<UserRolesViewModel>();
+            foreach (var user in users)
             {
-                _roleManager = roleManager;
-                _userManager = userManager;
-            }
-
-
-
-            public async Task<IActionResult> Index()
-            {
-                var users = await _userManager.Users.ToListAsync();
-                var VMlist = new List<UserRolesViewModel>();
-                foreach (var user in users)
+                var currentVM = new UserRolesViewModel()
                 {
-                    var currentVM = new UserRolesViewModel()
-                    {
-                        User = user,
-                        Roles = new List<string>(await _userManager.GetRolesAsync(user))
-                    };
-                    VMlist.Add(currentVM);
-                }
-                return View(VMlist);
+                    User = user,
+                    Roles = new List<string>(await _userManager.GetRolesAsync(user))
+                };
+                VMlist.Add(currentVM);
             }
+            return View(VMlist);
+        }
 
 
 
 
-            public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+
+
+            if (user == null)
             {
-                var user = await _userManager.FindByIdAsync(id);
-
-
-
-                if (user == null)
-                {
-                    return RedirectToAction("Index");
-                }
-
-
-
-                var roles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, roles);
-                await _userManager.DeleteAsync(user);
-
-
-
                 return RedirectToAction("Index");
             }
 
 
 
-            //GET
-            public async Task<IActionResult> Manage(string id)
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            await _userManager.DeleteAsync(user);
+
+
+
+            return RedirectToAction("Index");
+        }
+
+
+
+        //GET
+        public async Task<IActionResult> Manage(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
             {
-                var user = await _userManager.FindByIdAsync(id);
-                if (user == null)
-                {
-                    return RedirectToAction("Index");
-                }
-
-
-
-                var viewModels = new List<ManageUserRoleViewModel>();
-                foreach (var role in _roleManager.Roles)
-                {
-                    var vm = new ManageUserRoleViewModel();
-                    vm.User = user;
-                    vm.Role = role;
-                    vm.IsInRole = await _userManager.IsInRoleAsync(user, role.Name);
-                    viewModels.Add(vm);
-                }
-
-
-
-                return View(viewModels);
+                return RedirectToAction("Index");
             }
 
 
 
-            [HttpPost]
-            public async Task<IActionResult> Manage(List<ManageUserRoleViewModel> model)
+            var viewModels = new List<ManageUserRoleViewModel>();
+            foreach (var role in _roleManager.Roles)
             {
-                if (model != null && model.Count >= 1)
+                var vm = new ManageUserRoleViewModel();
+                vm.User = user;
+                vm.Role = role;
+                vm.IsInRole = await _userManager.IsInRoleAsync(user, role.Name);
+                viewModels.Add(vm);
+            }
+
+
+
+            return View(viewModels);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Manage(List<ManageUserRoleViewModel> model)
+        {
+            if (model != null && model.Count >= 1)
+            {
+                var user = await _userManager.FindByIdAsync(model[0].User.Id);
+
+
+
+                if (user != null)
                 {
-                    var user = await _userManager.FindByIdAsync(model[0].User.Id);
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var result = await _userManager.RemoveFromRolesAsync(user, roles);
 
 
 
-                    if (user != null)
+                    if (!result.Succeeded)
                     {
-                        var roles = await _userManager.GetRolesAsync(user);
-                        var result = await _userManager.RemoveFromRolesAsync(user, roles);
 
-
-
-                        if (!result.Succeeded)
-                        {
-
-
-
-                            ModelState.AddModelError("1", "Error Removing Roles.");
-                            return View(model);
-                        }
-                        result = await _userManager.AddToRolesAsync(user, model.Where(x => x.IsInRole).Select(y => y.Role.Name));
-
-
-
-                        if (!result.Succeeded)
-                        {
-
-
-
-                            ModelState.AddModelError("3", "Error Adding Roles.");
-                            return View(model);
-                        }
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("2", "User Not Found.");
+                        ModelState.AddModelError("1", "Error Removing Roles.");
                         return View(model);
                     }
+                    result = await _userManager.AddToRolesAsync(user, model.Where(x => x.IsInRole).Select(y => y.Role.Name));
+
+
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError("3", "Error Adding Roles.");
+                        return View(model);
+                    }
+                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    return RedirectToAction("Manage");
+                    ModelState.AddModelError("2", "User Not Found.");
+                    return View(model);
                 }
-
-
-
-
-
-
+            }
+            else
+            {
+                return RedirectToAction("Manage");
             }
 
-
-
-
-
-
         }
-            
+    }
+
 }

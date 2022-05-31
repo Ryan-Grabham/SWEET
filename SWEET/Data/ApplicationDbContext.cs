@@ -12,6 +12,7 @@ namespace SWEET.Data
         public DbSet<AssetModel>? Assets { get; set; }
         public DbSet<GeneralIssueModel>? GeneralIssues { get; set; }
         public DbSet<MaintenanceIssueModel>? MaintenanceIssue { get; set; }
+        public DbSet<MaintenanceIssueModel>? Categories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -139,6 +140,10 @@ namespace SWEET.Data
 
 
         }
+
+
+
+        public DbSet<SWEET.Models.CategoryModel>? CategoryModel { get; set; }
 
 
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWEET.Data;
 
@@ -10,9 +11,10 @@ using SWEET.Data;
 namespace SWEET.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220530082345_category")]
+    partial class category
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
@@ -387,9 +389,9 @@ namespace SWEET.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGj6naGqLQsg/QnMduxEaUaAlyRSfjt0WUf+VlXpqfXvYyi+K6q0bt5hg3UVfY144Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJaKlUYZoJ/trqxGWYBXiuhQZm8cN/Xi+U+b+gFJfW3PFloUkVur+CBACQnGnvX++Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "32382394-afa1-4d24-b865-a187ee4ae7db",
+                            SecurityStamp = "1463c53c-fcd4-4201-ae48-e7bd48d25d80",
                             Surname = "Admin",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"

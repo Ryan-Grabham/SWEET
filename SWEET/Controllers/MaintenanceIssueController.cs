@@ -63,12 +63,11 @@ namespace SWEET
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Updated,Description,UserId,RoomId,AssetId")] MaintenanceIssueModel maintenanceIssueModel)
         {
-            if (ModelState.IsValid)
-            {
+                       
                 _context.Add(maintenanceIssueModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
+            
             ViewData["AssetId"] = new SelectList(_context.Assets, "Id", "Id", maintenanceIssueModel.AssetId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", maintenanceIssueModel.UserId);
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", maintenanceIssueModel.RoomId);
